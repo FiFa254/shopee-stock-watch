@@ -1,5 +1,7 @@
 bin/
 obj/
+node_modules/
+public/
 .vs/
 App_Data/*.json
 *.user

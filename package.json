@@ -1,0 +1,11 @@
+{
+  "name": "shopee-stock-watch-netlify",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/prepare-netlify.mjs"
+  },
+  "dependencies": {
+    "mongodb": "^6.16.0"
+  }
+}

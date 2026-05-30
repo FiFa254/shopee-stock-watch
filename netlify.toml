@@ -1,0 +1,28 @@
+[build]
+  command = "npm run build"
+  publish = "public"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["mongodb"]
+
+[[redirects]]
+  from = "/Stock/State"
+  to = "/.netlify/functions/stock"
+  status = 200
+
+[[redirects]]
+  from = "/Stock/Add"
+  to = "/.netlify/functions/stock"
+  status = 200
+
+[[redirects]]
+  from = "/Stock/Delete/*"
+  to = "/.netlify/functions/stock"
+  status = 200
+
+[[redirects]]
+  from = "/Stock/SetStatus/*"
+  to = "/.netlify/functions/stock"
+  status = 200

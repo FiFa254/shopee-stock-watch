@@ -50,8 +50,19 @@ public class StockController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Check(CancellationToken cancellationToken)
+    public async Task<IActionResult> SetStatus(string id, [FromBody] SetStockStatusRequest request, CancellationToken cancellationToken)
     {
-        return Json(await _store.CheckAllAsync(cancellationToken));
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(new { error = "สถานะต้องเป็น in_stock หรือ out_of_stock" });
+        }
+
+        var item = await _store.SetStatusAsync(id, request.Status, cancellationToken);
+        if (item is null)
+        {
+            return NotFound(new { error = "ไม่พบรายการนี้" });
+        }
+
+        return Json(item);
     }
 }

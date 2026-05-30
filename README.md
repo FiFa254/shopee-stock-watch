@@ -51,3 +51,9 @@ Open: http://localhost:5243
 ```powershell
 dotnet build
 ```
+
+## Deploy ออนไลน์ฟรี
+
+ใช้ **Netlify** (เว็บ + API) + **MongoDB Atlas** (ฐานข้อมูล) — ดูขั้นตอนใน [DEPLOY.md](./DEPLOY.md)
+
+รันบนเครื่องด้วย `dotnet run` ได้เหมือนเดิม (ไม่ผ่าน Netlify)

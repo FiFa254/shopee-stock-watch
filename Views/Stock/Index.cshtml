@@ -6,7 +6,7 @@
     <div>
         <p class="sw-eyebrow">ติดตามสินค้า Shopee</p>
         <h1>Stock Watch</h1>
-        <p class="sw-lead">เพิ่มลิงก์สินค้า ตรวจสต็อกทันที หรือปล่อยให้ระบบตรวจอัตโนมัติทุกวัน</p>
+        <p class="sw-lead">เพิ่มลิงก์สินค้า เปิดดูใน Shopee แล้วกดบันทึกสถานะ มีของ / ไม่มีของ (ฟรี ไม่ดึงข้อมูลจาก Shopee อัตโนมัติ)</p>
     </div>
     <button id="stockNotifyButton" class="sw-btn sw-btn-ghost" type="button">เปิดการแจ้งเตือน</button>
 </section>
@@ -22,16 +22,14 @@
                 </label>
                 <label>
                     URL Shopee
-                    <input class="sw-input" name="url" placeholder="https://shopee.co.th/..." required />
+                    <input class="sw-input" name="url" placeholder="https://shopee.co.th/product/..." required />
                 </label>
+                <p class="sw-hint">คัดลอกลิงก์จากแถบที่อยู่หลังเปิดสินค้า (ล็อกอิน Shopee ก่อน) จากนั้นกด เปิด แล้วเลือก มีของ / ไม่มีของ</p>
                 <button class="sw-btn sw-btn-primary sw-btn-full" type="submit">เพิ่มรายการ</button>
             </form>
         </section>
 
         <section class="sw-panel sw-panel-compact">
-            <div class="sw-toolbar">
-                <button id="stockCheckButton" class="sw-btn sw-btn-primary" type="button">ตรวจสต็อกตอนนี้</button>
-            </div>
             <p id="stockSummary" class="sw-summary">กำลังโหลด...</p>
         </section>
 

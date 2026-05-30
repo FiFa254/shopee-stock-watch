@@ -1,20 +1,30 @@
 using ShopeeStockWatch.Data;
+using ShopeeStockWatch.Infrastructure;
 using ShopeeStockWatch.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDb"));
-builder.Services.AddSingleton(sp =>
+var port = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(port))
 {
-    var settings = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<MongoDbSettings>>().Value;
-    return settings;
+    builder.WebHost.UseUrls($"http://+:{port}");
+}
+
+var mongoSettings = MongoConfiguration.Resolve(builder.Configuration);
+builder.Services.Configure<MongoDbSettings>(_ =>
+{
+    _.ConnectionString = mongoSettings.ConnectionString;
+    _.DatabaseName = mongoSettings.DatabaseName;
 });
+builder.Services.AddSingleton(_ => mongoSettings);
 builder.Services.AddSingleton<StockWatchDbContext>();
 
-builder.Services.AddControllersWithViews();
-builder.Services.AddHttpClient<ShopeeStockChecker>();
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+    });
 builder.Services.AddSingleton<StockWatchStore>();
-builder.Services.AddHostedService<StockWatchBackgroundService>();
 
 var app = builder.Build();
 
@@ -31,7 +41,7 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-        logger.LogWarning(ex, "Could not connect to MongoDB. Ensure MongoDB is running on localhost:27017.");
+        logger.LogWarning(ex, "Could not connect to MongoDB. Set MONGODB_URI (Atlas) or run MongoDB locally.");
     }
 }
 
@@ -41,7 +51,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+if (string.IsNullOrEmpty(port))
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseRouting();
 app.UseAuthorization();
 app.MapStaticAssets();

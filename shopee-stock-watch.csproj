@@ -1,15 +1,30 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
-
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyName>shopee-stock-watch</AssemblyName>
-    <RootNamespace>ShopeeStockWatch</RootNamespace>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="3.*" />
-  </ItemGroup>
-
-</Project>
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+
+
+  <PropertyGroup>
+
+    <TargetFramework>net10.0</TargetFramework>
+
+    <Nullable>enable</Nullable>
+
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <AssemblyName>shopee-stock-watch</AssemblyName>
+
+    <RootNamespace>ShopeeStockWatch</RootNamespace>
+
+  </PropertyGroup>
+
+
+
+  <ItemGroup>
+
+    <PackageReference Include="MongoDB.Driver" Version="3.*" />
+
+  </ItemGroup>
+
+
+
+</Project>
+
