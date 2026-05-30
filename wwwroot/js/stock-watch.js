@@ -13,20 +13,20 @@ async function stockApi(path, options = {}) {
         ...options
     });
     const body = await response.json();
-    if (!response.ok) throw new Error(body.error || "Request failed");
+    if (!response.ok) throw new Error(body.error || "เกิดข้อผิดพลาด");
     return body;
 }
 
 function stockStatusText(status) {
     return {
-        in_stock: "In stock",
-        out_of_stock: "Sold out",
-        unknown: "Unknown"
-    }[status] || "Unknown";
+        in_stock: "มีสต็อก",
+        out_of_stock: "หมด",
+        unknown: "ไม่ทราบ"
+    }[status] || "ไม่ทราบ";
 }
 
 function stockFormatDate(value) {
-    if (!value) return "never";
+    if (!value) return "ยังไม่เคยตรวจ";
     return new Intl.DateTimeFormat("th-TH", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
 }
 
@@ -46,7 +46,7 @@ function stockMaybeNotify(items) {
     const current = new Set(items.filter((item) => item.status === "in_stock").map((item) => item.id));
     for (const item of items) {
         if (item.status === "in_stock" && !previousInStock.has(item.id)) {
-            new Notification("Shopee stock alert", { body: item.name });
+            new Notification("แจ้งเตือนสต็อก Shopee", { body: `${item.name} อาจมีสต็อกแล้ว!` });
         }
     }
     previousInStock = current;
@@ -54,22 +54,22 @@ function stockMaybeNotify(items) {
 
 function stockRenderItems(items) {
     if (!items.length) {
-        stockItemsEl.innerHTML = `<div class="stock-panel stock-empty">No products yet.</div>`;
+        stockItemsEl.innerHTML = `<div class="sw-empty">ยังไม่มีสินค้าในรายการ — เพิ่มลิงก์ Shopee ด้านซ้าย</div>`;
         return;
     }
 
     stockItemsEl.innerHTML = items.map((item) => `
-        <article class="stock-item">
-            <div class="stock-item-main">
-                <h2>${stockEscape(item.name)}</h2>
-                <a href="${stockEscape(item.url)}" target="_blank" rel="noreferrer">${stockEscape(item.url)}</a>
-                <p>${stockEscape(item.note || "Ready to check")} · Last checked ${stockFormatDate(item.lastCheckedAt)}</p>
+        <article class="sw-item">
+            <div class="sw-item-main">
+                <h3>${stockEscape(item.name)}</h3>
+                <a class="sw-item-link" href="${stockEscape(item.url)}" target="_blank" rel="noreferrer">${stockEscape(item.url)}</a>
+                <p class="sw-item-note">${stockEscape(item.note || "พร้อมตรวจสต็อก")} · ตรวจล่าสุด ${stockFormatDate(item.lastCheckedAt)}</p>
             </div>
-            <div class="stock-item-side">
-                <span class="stock-status ${stockEscape(item.status)}">${stockStatusText(item.status)}</span>
-                <div class="stock-actions">
-                    <a class="btn btn-outline-secondary btn-sm" href="${stockEscape(item.url)}" target="_blank" rel="noreferrer">Open</a>
-                    <button class="btn btn-outline-secondary btn-sm" data-delete="${stockEscape(item.id)}" type="button">Delete</button>
+            <div class="sw-item-side">
+                <span class="sw-status ${stockEscape(item.status)}">${stockStatusText(item.status)}</span>
+                <div class="sw-actions">
+                    <a class="sw-btn sw-btn-outline" href="${stockEscape(item.url)}" target="_blank" rel="noreferrer">เปิด</a>
+                    <button class="sw-btn sw-btn-outline sw-btn-danger" data-delete="${stockEscape(item.id)}" type="button">ลบ</button>
                 </div>
             </div>
         </article>
@@ -78,43 +78,60 @@ function stockRenderItems(items) {
 
 function stockRenderEvents(events) {
     if (!events.length) {
-        stockEventsEl.innerHTML = `<p class="stock-muted">No activity yet.</p>`;
+        stockEventsEl.innerHTML = `<p class="sw-summary">ยังไม่มีกิจกรรม</p>`;
         return;
     }
 
     stockEventsEl.innerHTML = events.slice(0, 50).map((event) => `
-        <div class="stock-event">
-            <span>${stockEscape(event.message)}</span>
+        <div class="sw-event ${stockEscape(event.level === "success" ? "success" : "")}">
+            <span class="sw-event-message">${stockEscape(event.message)}</span>
             <time>${stockFormatDate(event.createdAt)}</time>
         </div>
     `).join("");
 }
 
 async function stockRefresh() {
-    const state = await stockApi("/Stock/State");
-    stockRenderItems(state.items);
-    stockRenderEvents(state.events);
-    stockSummaryEl.textContent = `${state.items.length} product(s) · daily check around ${state.settings.dailyCheckHour}:00`;
-    stockMaybeNotify(state.items);
+    try {
+        const state = await stockApi("/Stock/State");
+        stockRenderItems(state.items);
+        stockRenderEvents(state.events);
+        stockSummaryEl.textContent = `${state.items.length} รายการ · ตรวจอัตโนมัติประมาณ ${state.settings.dailyCheckHour}:00 น.`;
+        stockMaybeNotify(state.items);
+    } catch (error) {
+        stockSummaryEl.textContent = error.message;
+        stockItemsEl.innerHTML = `<div class="sw-empty">ไม่สามารถโหลดข้อมูลได้ — ตรวจสอบว่า MongoDB เปิดอยู่</div>`;
+    }
 }
 
 stockAddForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(stockAddForm);
-    await stockApi("/Stock/Add", {
-        method: "POST",
-        body: JSON.stringify(Object.fromEntries(formData))
-    });
-    stockAddForm.reset();
-    await stockRefresh();
+    const submitBtn = stockAddForm.querySelector("[type=submit]");
+    submitBtn.disabled = true;
+
+    try {
+        await stockApi("/Stock/Add", {
+            method: "POST",
+            body: JSON.stringify(Object.fromEntries(formData))
+        });
+        stockAddForm.reset();
+        await stockRefresh();
+    } catch (error) {
+        alert(error.message);
+    } finally {
+        submitBtn.disabled = false;
+    }
 });
 
 stockCheckButton.addEventListener("click", async () => {
     stockCheckButton.disabled = true;
-    stockSummaryEl.textContent = "Checking Shopee...";
+    stockSummaryEl.textContent = "กำลังตรวจสอบ Shopee...";
+
     try {
         await stockApi("/Stock/Check", { method: "POST", body: "{}" });
         await stockRefresh();
+    } catch (error) {
+        stockSummaryEl.textContent = error.message;
     } finally {
         stockCheckButton.disabled = false;
     }
@@ -122,19 +139,30 @@ stockCheckButton.addEventListener("click", async () => {
 
 stockNotifyButton.addEventListener("click", async () => {
     if (!("Notification" in window)) {
-        alert("This browser does not support notifications.");
+        alert("เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือน");
         return;
     }
-    await Notification.requestPermission();
+    const permission = await Notification.requestPermission();
+    if (permission === "granted") {
+        stockNotifyButton.textContent = "แจ้งเตือนเปิดแล้ว";
+    }
     await stockRefresh();
 });
 
 stockItemsEl.addEventListener("click", async (event) => {
     const button = event.target.closest("[data-delete]");
     if (!button) return;
-    await stockApi(`/Stock/Delete/${button.dataset.delete}`, { method: "DELETE" });
-    await stockRefresh();
+
+    if (!confirm("ลบรายการนี้?")) return;
+
+    try {
+        await stockApi(`/Stock/Delete/${button.dataset.delete}`, { method: "DELETE" });
+        await stockRefresh();
+    } catch (error) {
+        alert(error.message);
+    }
 });
 
+stockItemsEl.innerHTML = `<div class="sw-loading">กำลังโหลด</div>`;
 stockRefresh();
 setInterval(stockRefresh, 30000);

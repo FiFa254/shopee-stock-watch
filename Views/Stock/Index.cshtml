@@ -2,40 +2,52 @@
     ViewData["Title"] = "Shopee Stock Watch";
 }
 
-<section class="stock-hero">
+<section class="sw-hero">
     <div>
-        <p class="stock-eyebrow">Web Application</p>
-        <h1>Shopee Stock Watch</h1>
-        <p>Add Shopee products, check availability on demand, and let this app check once per day.</p>
+        <p class="sw-eyebrow">ติดตามสินค้า Shopee</p>
+        <h1>Stock Watch</h1>
+        <p class="sw-lead">เพิ่มลิงก์สินค้า ตรวจสต็อกทันที หรือปล่อยให้ระบบตรวจอัตโนมัติทุกวัน</p>
     </div>
-    <button id="stockNotifyButton" class="btn btn-outline-secondary" type="button">Notify</button>
+    <button id="stockNotifyButton" class="sw-btn sw-btn-ghost" type="button">เปิดการแจ้งเตือน</button>
 </section>
 
-<section class="stock-panel">
-    <form id="stockAddForm" class="stock-form">
-        <label>
-            Product name
-            <input class="form-control" name="name" placeholder="Headphones, keyboard, limited item" required />
-        </label>
-        <label class="stock-url-field">
-            Shopee URL
-            <input class="form-control" name="url" placeholder="https://shopee.co.th/..." required />
-        </label>
-        <button class="btn btn-primary" type="submit">Add</button>
-    </form>
-</section>
+<div class="sw-dashboard">
+    <aside class="sw-sidebar">
+        <section class="sw-panel">
+            <h2>เพิ่มสินค้า</h2>
+            <form id="stockAddForm" class="sw-form">
+                <label>
+                    ชื่อสินค้า
+                    <input class="sw-input" name="name" placeholder="หูฟัง, คีย์บอร์ด, ของ limited" required />
+                </label>
+                <label>
+                    URL Shopee
+                    <input class="sw-input" name="url" placeholder="https://shopee.co.th/..." required />
+                </label>
+                <button class="sw-btn sw-btn-primary sw-btn-full" type="submit">เพิ่มรายการ</button>
+            </form>
+        </section>
 
-<section class="stock-toolbar">
-    <button id="stockCheckButton" class="btn btn-primary" type="button">Check now</button>
-    <p id="stockSummary">Loading...</p>
-</section>
+        <section class="sw-panel sw-panel-compact">
+            <div class="sw-toolbar">
+                <button id="stockCheckButton" class="sw-btn sw-btn-primary" type="button">ตรวจสต็อกตอนนี้</button>
+            </div>
+            <p id="stockSummary" class="sw-summary">กำลังโหลด...</p>
+        </section>
 
-<section id="stockItems" class="stock-items"></section>
+        <section class="sw-panel">
+            <h2>กิจกรรมล่าสุด</h2>
+            <div id="stockEvents" class="sw-timeline"></div>
+        </section>
+    </aside>
 
-<section class="stock-panel">
-    <h2>Recent activity</h2>
-    <div id="stockEvents" class="stock-events"></div>
-</section>
+    <section class="sw-content">
+        <div class="sw-content-header">
+            <h2>รายการที่ติดตาม</h2>
+        </div>
+        <div id="stockItems" class="sw-items"></div>
+    </section>
+</div>
 
 @section Scripts {
     <script src="~/js/stock-watch.js" asp-append-version="true"></script>
