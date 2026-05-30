@@ -9,7 +9,14 @@ const json = (statusCode, body) => ({
 function resolveAction(event) {
   const url = new URL(event.rawUrl);
   const fromQuery = url.searchParams.get("action");
-  if (fromQuery) return { action: fromQuery, url };
+  if (fromQuery) {
+    const queryId = url.searchParams.get("id");
+    return {
+      action: fromQuery,
+      id: queryId ? decodeURIComponent(queryId) : undefined,
+      url,
+    };
+  }
 
   const path = url.pathname.replace(/\/+$/, "");
   if (path.endsWith("/Stock/State")) return { action: "state", url };
@@ -92,8 +99,8 @@ export async function handler(event) {
 
     if (action === "delete" && method === "DELETE") {
       const itemId = id || url.pathname.split("/").pop();
-      const existing = await items.findOne({ _id: itemId });
-      await items.deleteOne({ _id: itemId });
+      const existing = await findItemById(items, itemId);
+      await items.deleteOne({ _id: existing._id });
       if (existing) {
         await events.insertOne(
           newEvent(`ลบ "${existing.Name ?? existing.name}" ออกจากรายการ`, itemId)
@@ -111,7 +118,7 @@ export async function handler(event) {
         return json(400, { error: "สถานะต้องเป็น in_stock หรือ out_of_stock" });
       }
 
-      const existing = await items.findOne({ _id: itemId });
+      const existing = await findItemById(items, itemId);
       if (!existing) {
         return json(404, { error: "ไม่พบรายการนี้" });
       }
@@ -129,7 +136,7 @@ export async function handler(event) {
             : existing.LastSeenInStockAt ?? existing.lastSeenInStockAt ?? null,
       };
 
-      await items.replaceOne({ _id: itemId }, updated);
+      await items.replaceOne({ _id: existing._id }, updated);
 
       const itemName = updated.Name ?? updated.name;
       const statusLabel = status === "in_stock" ? "มีของ" : "ไม่มีของ";
@@ -151,6 +158,13 @@ export async function handler(event) {
     console.error(error);
     return json(500, { error: error.message || "Server error" });
   }
+}
+
+async function findItemById(collection, itemId) {
+  if (!itemId) return null;
+  const byId = await collection.findOne({ _id: itemId });
+  if (byId) return byId;
+  return collection.findOne({ Id: itemId });
 }
 
 function normalizeItem(doc) {

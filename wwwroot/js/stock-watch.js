@@ -35,8 +35,15 @@ async function stockApi(path, options = {}) {
         headers: { "content-type": "application/json" },
         ...options
     });
-    const body = await response.json();
-    if (!response.ok) throw new Error(body.error || "เกิดข้อผิดพลาด");
+    let body = {};
+    try {
+        body = await response.json();
+    } catch {
+        body = {};
+    }
+    if (!response.ok) {
+        throw new Error(body.error || `เกิดข้อผิดพลาด (${response.status})`);
+    }
     return body;
 }
 
