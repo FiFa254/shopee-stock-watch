@@ -1,8 +1,8 @@
 using MongoDB.Driver;
-using WebApplication2.Data;
-using WebApplication2.Models;
+using ShopeeStockWatch.Data;
+using ShopeeStockWatch.Models;
 
-namespace WebApplication2.Services;
+namespace ShopeeStockWatch.Services;
 
 public class StockWatchStore
 {

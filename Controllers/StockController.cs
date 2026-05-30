@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using WebApplication2.Models;
-using WebApplication2.Services;
+using ShopeeStockWatch.Models;
+using ShopeeStockWatch.Services;
 
-namespace WebApplication2.Controllers;
+namespace ShopeeStockWatch.Controllers;
 
 public class StockController : Controller
 {

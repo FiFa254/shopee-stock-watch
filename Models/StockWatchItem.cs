@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace WebApplication2.Models;
+namespace ShopeeStockWatch.Models;
 
 public class StockWatchItem
 {

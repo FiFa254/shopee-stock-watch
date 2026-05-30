@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApplication2.Models;
+namespace ShopeeStockWatch.Models;
 
 public class AddStockWatchItemRequest
 {

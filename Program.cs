@@ -1,5 +1,5 @@
-using WebApplication2.Data;
-using WebApplication2.Services;
+using ShopeeStockWatch.Data;
+using ShopeeStockWatch.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

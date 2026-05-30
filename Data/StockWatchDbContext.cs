@@ -1,9 +1,9 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
-using WebApplication2.Models;
+using ShopeeStockWatch.Models;
 
-namespace WebApplication2.Data;
+namespace ShopeeStockWatch.Data;
 
 public class AppSettingsDocument
 {

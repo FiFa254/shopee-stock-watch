@@ -1,4 +1,4 @@
-namespace WebApplication2.Data;
+namespace ShopeeStockWatch.Data;
 
 public class MongoDbSettings
 {

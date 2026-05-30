@@ -1,4 +1,4 @@
-namespace WebApplication2.Services;
+namespace ShopeeStockWatch.Services;
 
 public class ShopeeStockChecker
 {

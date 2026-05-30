@@ -1,3 +1,3 @@
-namespace WebApplication2.Services;
+namespace ShopeeStockWatch.Services;
 
 public record StockCheckResult(string Status, string Message);

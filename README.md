@@ -1,4 +1,4 @@
-# WebApplication2 — Shopee Stock Watch
+# shopee-stock-watch — Shopee Stock Watch
 
 ASP.NET Core MVC web application for tracking Shopee product availability. Data is stored in **MongoDB**.
 
@@ -32,7 +32,7 @@ Collections used:
 ## Run
 
 ```powershell
-cd "C:\Users\64502\source\repos\WebApplication2"
+cd "C:\Users\64502\source\repos\shopee-stock-watch"
 dotnet run --urls http://localhost:5243
 ```
 

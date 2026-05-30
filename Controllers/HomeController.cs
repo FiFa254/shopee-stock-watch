@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication2.Models;
+using ShopeeStockWatch.Models;
 
-namespace WebApplication2.Controllers;
+namespace ShopeeStockWatch.Controllers;
 
 public class HomeController : Controller
 {
