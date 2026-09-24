@@ -13,6 +13,18 @@ ASP.NET Core MVC web application for tracking Shopee product availability. Data 
 - .NET 10 SDK
 - **MongoDB Community Server** running on `localhost:27017`
 
+## Project Structure
+
+- `Controllers/` — MVC controllers (`HomeController`, `StockController`)
+- `Models/` — request/response and domain models (`StockWatchItem`, `StockWatchEvent`, `StockWatchState`, …)
+- `Views/` — Razor views (`Home/`, `Stock/`, `Shared/`)
+- `Services/` — `StockWatchStore` — core business logic for the watch list and stock checks
+- `Data/` — MongoDB settings and `StockWatchDbContext`
+- `Infrastructure/` — `MongoConfiguration` — MongoDB client/service registration
+- `wwwroot/` — static CSS, JavaScript, and client libraries
+- `netlify/functions/` — serverless functions used by the Netlify deployment
+- `scripts/` — build/deploy helper scripts
+
 ## Configuration
 
 MongoDB settings in `appsettings.json`:
