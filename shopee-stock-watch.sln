@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.6.11822.322 stable
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "shopee-stock-watch", "shopee-stock-watch.csproj", "{CE092B23-D996-2C98-CB96-B1BEFEF62110}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE092B23-D996-2C98-CB96-B1BEFEF62110}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE092B23-D996-2C98-CB96-B1BEFEF62110}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE092B23-D996-2C98-CB96-B1BEFEF62110}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE092B23-D996-2C98-CB96-B1BEFEF62110}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9D2B270D-C362-49F4-BFE1-3850115A8BC7}
+	EndGlobalSection
+EndGlobal

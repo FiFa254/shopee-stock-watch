@@ -6,3 +6,4 @@ public/
 App_Data/*.json
 *.user
 *.log
+.vscode/
