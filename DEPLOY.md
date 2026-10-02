@@ -45,7 +45,7 @@ Repo: `https://github.com/FiFa254/shopee-stock-watch`
 ไม่ผ่าน Netlify — ใช้แอป .NET เดิม:
 
 ```powershell
-cd WebApplication2
+cd shopee-stock-watch
 dotnet run --urls http://localhost:5243
 ```
 
@@ -58,7 +58,7 @@ dotnet run --urls http://localhost:5243
 ต้องติดตั้ง [Node.js](https://nodejs.org) ก่อน:
 
 ```powershell
-cd WebApplication2
+cd shopee-stock-watch
 npm install
 npm run build
 ```

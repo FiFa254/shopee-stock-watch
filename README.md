@@ -6,7 +6,6 @@ ASP.NET Core MVC web application for tracking Shopee product availability. Data 
 
 - ASP.NET Core MVC (.NET 10)
 - MongoDB (local)
-- Background service for daily stock checks
 
 ## Prerequisites
 
@@ -53,8 +52,7 @@ Open: http://localhost:5243
 ## Features
 
 - Add Shopee product URLs to a watch list
-- Check stock on demand
-- Automatic daily check (default 9:00 AM)
+- Record stock status (in stock / out of stock) manually after opening the product link
 - Browser notifications when items come back in stock
 - Data persisted in MongoDB (survives app restarts)
 
