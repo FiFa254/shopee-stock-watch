@@ -31,7 +31,6 @@ const indexHtml = `<!DOCTYPE html>
         <span class="sw-brand-icon">S</span>
         <span>Shopee Stock Watch</span>
       </a>
-      <span class="sw-badge">Netlify</span>
     </div>
   </header>
 

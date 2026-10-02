@@ -122,16 +122,6 @@ a {
     font-size: 0.95rem;
 }
 
-.sw-badge {
-    padding: 0.3rem 0.75rem;
-    border-radius: 999px;
-    background: var(--sw-subtle);
-    border: 1px solid var(--sw-border);
-    color: var(--sw-muted);
-    font-size: 0.78rem;
-    font-weight: 700;
-}
-
 /* Main */
 .sw-main {
     padding: clamp(1.25rem, 4vw, 2rem) 0 clamp(2rem, 6vw, 3rem);
@@ -619,10 +609,6 @@ a {
         order: 2;
     }
 
-    .sw-hero .sw-btn {
-        width: 100%;
-    }
-
     .sw-item {
         flex-wrap: wrap;
     }
@@ -639,11 +625,6 @@ a {
 @media (max-width: 480px) {
     .sw-header-inner {
         min-height: auto;
-    }
-
-    .sw-badge {
-        font-size: 0.72rem;
-        padding: 0.25rem 0.55rem;
     }
 
     .sw-hero h1 {
