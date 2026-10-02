@@ -73,7 +73,7 @@ export async function handler(event) {
       const name = (body.name || "").trim();
       const itemUrl = (body.url || "").trim();
 
-      if (!itemUrl.toLowerCase().includes("shopee")) {
+      if (!/^https?:\/\//i.test(itemUrl) || !itemUrl.toLowerCase().includes("shopee")) {
         return json(400, { error: "Please enter a Shopee product URL." });
       }
 
@@ -100,8 +100,8 @@ export async function handler(event) {
     if (action === "delete" && method === "DELETE") {
       const itemId = id || url.pathname.split("/").pop();
       const existing = await findItemById(items, itemId);
-      await items.deleteOne({ _id: existing._id });
       if (existing) {
+        await items.deleteOne({ _id: existing._id });
         await events.insertOne(
           newEvent(`ลบ "${existing.Name ?? existing.name}" ออกจากรายการ`, itemId)
         );
@@ -141,7 +141,7 @@ export async function handler(event) {
       const itemName = updated.Name ?? updated.name;
       const statusLabel = status === "in_stock" ? "มีของ" : "ไม่มีของ";
       await events.insertOne(
-        newEvent(`"${itemName}" → ${statusLabel}`, itemId, "success")
+        newEvent(`"${itemName}" → ${statusLabel}`, itemId, status === "in_stock" ? "success" : "info")
       );
 
       if (status === "in_stock" && previousStatus !== "in_stock") {
@@ -167,6 +167,10 @@ async function findItemById(collection, itemId) {
   return collection.findOne({ Id: itemId });
 }
 
+function toDate(value) {
+  return value?.DateTime ?? value;
+}
+
 function normalizeItem(doc) {
   return {
     id: doc._id,
@@ -175,9 +179,9 @@ function normalizeItem(doc) {
     desired: doc.Desired ?? doc.desired,
     status: doc.Status ?? doc.status,
     note: doc.Note ?? doc.note,
-    createdAt: doc.CreatedAt ?? doc.createdAt,
-    lastCheckedAt: doc.LastCheckedAt ?? doc.lastCheckedAt,
-    lastSeenInStockAt: doc.LastSeenInStockAt ?? doc.lastSeenInStockAt,
+    createdAt: toDate(doc.CreatedAt ?? doc.createdAt),
+    lastCheckedAt: toDate(doc.LastCheckedAt ?? doc.lastCheckedAt),
+    lastSeenInStockAt: toDate(doc.LastSeenInStockAt ?? doc.lastSeenInStockAt),
   };
 }
 
@@ -187,6 +191,6 @@ function normalizeEvent(doc) {
     itemId: doc.ItemId ?? doc.itemId,
     level: doc.Level ?? doc.level,
     message: doc.Message ?? doc.message,
-    createdAt: doc.CreatedAt ?? doc.createdAt,
+    createdAt: toDate(doc.CreatedAt ?? doc.createdAt),
   };
 }
