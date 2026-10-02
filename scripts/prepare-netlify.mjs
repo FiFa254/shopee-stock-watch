@@ -39,7 +39,6 @@ const indexHtml = `<!DOCTYPE html>
     <div class="sw-container">
       <section class="sw-hero">
         <div>
-          <p class="sw-eyebrow">ติดตามสินค้า Shopee</p>
           <h1>Stock Watch</h1>
           <p class="sw-lead">เพิ่มลิงก์สินค้า เปิดดูใน Shopee แล้วกดบันทึกสถานะ มีของ / ไม่มีของ (ฟรี ไม่ดึงข้อมูลจาก Shopee อัตโนมัติ)</p>
         </div>
@@ -64,19 +63,16 @@ const indexHtml = `<!DOCTYPE html>
             </form>
           </section>
 
-          <section class="sw-panel sw-panel-compact">
-            <p id="stockSummary" class="sw-summary">กำลังโหลด...</p>
-          </section>
-
           <section class="sw-panel">
             <h2>กิจกรรมล่าสุด</h2>
-            <div id="stockEvents" class="sw-timeline"></div>
+            <div id="stockEvents" class="sw-timeline" tabindex="0" aria-label="กิจกรรมล่าสุด"></div>
           </section>
         </aside>
 
         <section class="sw-content">
           <div class="sw-content-header">
             <h2>รายการที่ติดตาม</h2>
+            <p id="stockSummary" class="sw-summary" aria-live="polite">กำลังโหลด...</p>
           </div>
           <div id="stockItems" class="sw-items"></div>
         </section>

@@ -149,7 +149,9 @@ async function stockRefresh() {
         stockRenderItems(state.items);
         stockRenderEvents(state.events);
         const inStock = state.items.filter((item) => stockStatusKey(item) === "in_stock").length;
-        stockSummaryEl.textContent = `${state.items.length} รายการ · มีของ ${inStock} รายการ`;
+        stockSummaryEl.innerHTML = `
+            <span class="sw-count"><strong>${state.items.length}</strong> รายการ</span>
+            <span class="sw-count sw-count-in"><strong>${inStock}</strong> มีของ</span>`;
         stockMaybeNotify(state.items);
     } catch (error) {
         stockSummaryEl.textContent = error.message;

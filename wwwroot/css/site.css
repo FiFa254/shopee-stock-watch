@@ -156,15 +156,6 @@ a {
     align-self: flex-start;
 }
 
-.sw-eyebrow {
-    margin: 0 0 0.4rem;
-    color: var(--sw-primary);
-    font-size: 0.82rem;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-}
-
 .sw-hero h1 {
     margin: 0 0 0.5rem;
     font-size: clamp(2rem, 4vw, 2.75rem);
@@ -201,18 +192,51 @@ a {
     box-shadow: var(--sw-shadow);
 }
 
-.sw-panel-compact {
-    padding: 1rem 1.35rem;
-}
-
 .sw-panel h2 {
     margin: 0 0 1rem;
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 700;
 }
 
 .sw-content-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
     margin-bottom: 1rem;
+}
+
+.sw-count {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    padding: 0.25rem 0.8rem;
+    border: 1px solid var(--sw-border);
+    border-radius: 999px;
+    background: var(--sw-surface);
+    color: var(--sw-muted);
+    font-size: 0.85rem;
+}
+
+.sw-count + .sw-count {
+    margin-left: 0.35rem;
+}
+
+.sw-count strong {
+    color: var(--sw-text);
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.sw-count-in {
+    border-color: transparent;
+    background: var(--sw-green-soft);
+    color: var(--sw-green);
+}
+
+.sw-count-in strong {
+    color: var(--sw-green);
 }
 
 .sw-content-header h2 {
@@ -352,6 +376,9 @@ a {
 
 .sw-hint {
     margin: -0.35rem 0 0;
+    padding: 0.65rem 0.8rem;
+    border-radius: var(--sw-radius-sm);
+    background: var(--sw-subtle);
     color: var(--sw-muted);
     font-size: 0.8rem;
     line-height: 1.45;
@@ -466,6 +493,11 @@ a {
 .sw-timeline {
     display: grid;
     gap: 0;
+    max-height: 420px;
+    overflow-y: auto;
+    padding-left: 5px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--sw-border-strong) transparent;
 }
 
 .sw-event {
