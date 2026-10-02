@@ -100,7 +100,7 @@ function stockMaybeNotify(items) {
 
 function stockRenderItems(items) {
     if (!items.length) {
-        stockItemsEl.innerHTML = `<div class="sw-empty">ยังไม่มีสินค้าในรายการ — เพิ่มลิงก์ Shopee จากแบบฟอร์มด้านล่าง</div>`;
+        stockItemsEl.innerHTML = `<div class="sw-empty">ยังไม่มีสินค้าในรายการ — เพิ่มลิงก์ Shopee จากแบบฟอร์ม "เพิ่มสินค้า"</div>`;
         return;
     }
 
@@ -109,21 +109,25 @@ function stockRenderItems(items) {
         const url = item.url ?? item.Url ?? "";
         const id = stockItemId(item);
         const name = item.name ?? item.Name ?? "สินค้า";
-        const hint = statusKey === "unknown"
-            ? `<p class="sw-item-hint">กด เปิด ดูใน Shopee แล้วเลือก มีของ หรือ ไม่มีของ</p>`
-            : "";
+        const detail = statusKey === "unknown"
+            ? "กด เปิดใน Shopee แล้วเลือก มีของ หรือ ไม่มีของ"
+            : `บันทึกล่าสุด ${stockFormatDate(item.lastCheckedAt ?? item.LastCheckedAt)}`;
         return `
         <article class="sw-item sw-item-${stockEscape(statusKey)}">
             <div class="sw-item-body">
-                <h3 class="sw-item-name">${stockEscape(name)}</h3>
-                ${hint}
+                <div class="sw-item-title">
+                    <h3 class="sw-item-name">${stockEscape(name)}</h3>
+                    <span class="sw-status sw-status-${stockEscape(statusKey)}">${stockStatusText(statusKey)}</span>
+                </div>
+                <p class="sw-item-hint">${stockEscape(detail)}</p>
             </div>
-            <span class="sw-status sw-status-${stockEscape(statusKey)}">${stockStatusText(statusKey)}</span>
             <div class="sw-item-actions">
-                <a class="sw-btn sw-btn-outline" href="${stockEscape(url)}" target="_blank" rel="noreferrer">เปิด</a>
-                <button class="sw-btn sw-btn-outline sw-btn-status-in" data-status="in_stock" data-id="${stockEscape(id)}" type="button">มีของ</button>
-                <button class="sw-btn sw-btn-outline sw-btn-status-out" data-status="out_of_stock" data-id="${stockEscape(id)}" type="button">ไม่มีของ</button>
-                <button class="sw-btn sw-btn-outline sw-btn-danger" data-delete="${stockEscape(id)}" type="button">ลบ</button>
+                <a class="sw-btn sw-btn-outline" href="${stockEscape(url)}" target="_blank" rel="noreferrer">เปิดใน Shopee</a>
+                <div class="sw-segment" role="group" aria-label="บันทึกสถานะ ${stockEscape(name)}">
+                    <button class="sw-segment-btn sw-segment-in" data-status="in_stock" data-id="${stockEscape(id)}" aria-pressed="${statusKey === "in_stock"}" type="button">มีของ</button>
+                    <button class="sw-segment-btn sw-segment-out" data-status="out_of_stock" data-id="${stockEscape(id)}" aria-pressed="${statusKey === "out_of_stock"}" type="button">ไม่มีของ</button>
+                </div>
+                <button class="sw-btn sw-btn-text" data-delete="${stockEscape(id)}" aria-label="ลบ ${stockEscape(name)}" type="button">ลบ</button>
             </div>
         </article>`;
     }).join("");
@@ -149,7 +153,9 @@ async function stockRefresh() {
         stockRenderItems(state.items);
         stockRenderEvents(state.events);
         const inStock = state.items.filter((item) => stockStatusKey(item) === "in_stock").length;
-        stockSummaryEl.textContent = `${state.items.length} รายการ · มีของ ${inStock} รายการ`;
+        stockSummaryEl.innerHTML = `
+            <span class="sw-count"><strong>${state.items.length}</strong> รายการ</span>
+            <span class="sw-count sw-count-in"><strong>${inStock}</strong> มีของ</span>`;
         stockMaybeNotify(state.items);
     } catch (error) {
         stockSummaryEl.textContent = error.message;
